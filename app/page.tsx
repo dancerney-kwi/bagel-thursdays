@@ -16,7 +16,7 @@ import {
   setStoredUserName,
   normalizeUserName,
 } from '@/lib/utils/storage';
-import { getCurrentWeekId } from '@/lib/utils/dates';
+import { getCurrentWeekId, isBeforeCutoff } from '@/lib/utils/dates';
 import { getBagelName } from '@/lib/constants/bagels';
 import { UI } from '@/lib/constants/config';
 import type { BagelTypeId } from '@/lib/types';
@@ -29,6 +29,7 @@ export default function Home() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [isClient, setIsClient] = useState(false);
+  const [isOrderingOpen, setIsOrderingOpen] = useState(true);
 
   // Check for existing submission and load stored data on mount
   useEffect(() => {
@@ -53,6 +54,15 @@ export default function Home() {
       }
     }
 
+    // Check if ordering is open
+    setIsOrderingOpen(isBeforeCutoff());
+
+    // Re-check every minute in case cutoff passes while page is open
+    const intervalId = setInterval(() => {
+      setIsOrderingOpen(isBeforeCutoff());
+    }, 60000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -117,7 +127,8 @@ export default function Home() {
   };
 
   // Check if form is valid for submission
-  const canSubmit = userName.trim().length > 0 && selectedBagel && !hasSubmitted && !isSubmitting;
+  const canSubmit = userName.trim().length > 0 && selectedBagel && !hasSubmitted && !isSubmitting && isOrderingOpen;
+  const isFormDisabled = hasSubmitted || !isOrderingOpen;
 
   return (
     <div className="flex min-h-screen flex-col items-center bg-background px-4 py-8">
@@ -162,7 +173,7 @@ export default function Home() {
               id="user-name"
               value={userName}
               onChange={handleNameChange}
-              disabled={hasSubmitted}
+              disabled={isFormDisabled}
               placeholder="First Name Last Initial (e.g., John D)"
               maxLength={UI.USER_NAME_MAX_LENGTH}
               className={`
@@ -187,7 +198,7 @@ export default function Home() {
               customBagel={customBagel}
               onBagelSelect={setSelectedBagel}
               onCustomBagelChange={setCustomBagel}
-              disabled={hasSubmitted}
+              disabled={isFormDisabled}
             />
           </div>
 
@@ -219,6 +230,8 @@ export default function Home() {
                 </>
               ) : hasSubmitted ? (
                 'Order Submitted!'
+              ) : !isOrderingOpen ? (
+                'Orders Closed'
               ) : (
                 <>
                   Submit Order
@@ -238,6 +251,18 @@ export default function Home() {
               </p>
               <p className="mt-1 text-sm text-gray">
                 Thank you! Your bagel preference has been recorded.
+              </p>
+            </div>
+          )}
+
+          {/* Orders closed message */}
+          {!isOrderingOpen && !hasSubmitted && (
+            <div className="mt-4 rounded-xl bg-gray-light/10 p-4 text-center">
+              <p className="font-medium text-foreground">
+                Orders for this week are closed
+              </p>
+              <p className="mt-1 text-sm text-gray">
+                New orders open Friday at midnight EST
               </p>
             </div>
           )}
