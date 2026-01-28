@@ -31,25 +31,16 @@ function Separator() {
   );
 }
 
-interface CountdownMessageProps {
-  state: CycleState;
-}
-
-function CountdownMessage({ state }: CountdownMessageProps) {
-  const messages: Record<CycleState, string> = {
-    collecting: 'Time remaining to submit your order',
-    closed: 'Orders closed! Bagels arriving Thursday morning',
-    'reset-pending': 'New week starting Friday at midnight!',
-  };
-
+function CountdownTimer({ countdown }: { countdown: CountdownValues }) {
   return (
-    <div className="mt-4 text-center">
-      <p className="text-sm font-medium text-foreground sm:text-base">
-        {messages[state]}
-      </p>
-      <p className="mt-1 text-xs text-gray">
-        Orders close Wednesday at 12:00 PM EST
-      </p>
+    <div className="flex items-center justify-center gap-2 sm:gap-4">
+      <CountdownUnit value={countdown.days} label="Days" />
+      <Separator />
+      <CountdownUnit value={countdown.hours} label="Hours" />
+      <Separator />
+      <CountdownUnit value={countdown.minutes} label="Minutes" />
+      <Separator />
+      <CountdownUnit value={countdown.seconds} label="Seconds" />
     </div>
   );
 }
@@ -94,18 +85,32 @@ export default function Countdown() {
     };
   }, [updateCountdown]);
 
+  if (cycleState === 'closed' || cycleState === 'reset-pending') {
+    return (
+      <div className="rounded-2xl border border-gray-light/20 bg-white p-6 text-center shadow-lg shadow-black/5 sm:p-8">
+        <p className="mb-2 text-lg font-bold text-foreground sm:text-xl">
+          Orders closed! Bagels arriving Thursday morning
+        </p>
+        <p className="mb-4 text-sm text-gray">
+          Next week's submissions open in:
+        </p>
+        <CountdownTimer countdown={countdown} />
+        <p className="mt-4 text-xs text-gray">
+          Orders close Wednesday at 12:00 PM EST
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className="rounded-2xl border border-gray-light/20 bg-white p-6 text-center shadow-lg shadow-black/5 sm:p-8">
-      <div className="flex items-center justify-center gap-2 sm:gap-4">
-        <CountdownUnit value={countdown.days} label="Days" />
-        <Separator />
-        <CountdownUnit value={countdown.hours} label="Hours" />
-        <Separator />
-        <CountdownUnit value={countdown.minutes} label="Minutes" />
-        <Separator />
-        <CountdownUnit value={countdown.seconds} label="Seconds" />
-      </div>
-      <CountdownMessage state={cycleState} />
+      <p className="mb-4 text-sm font-medium text-foreground sm:text-base">
+        Time remaining to submit your order
+      </p>
+      <CountdownTimer countdown={countdown} />
+      <p className="mt-4 text-xs text-gray">
+        Orders close Wednesday at 12:00 PM EST
+      </p>
     </div>
   );
 }
