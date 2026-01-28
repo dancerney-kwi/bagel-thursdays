@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <radialGradient id="eggBagelGrad" cx="40%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#FCE8A0"/>
+      <stop offset="50%" stop-color="#F4D87C"/>
+      <stop offset="100%" stop-color="#E8C55A"/>
+    </radialGradient>
+    <radialGradient id="eggHoleGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FFFEF8"/>
+      <stop offset="100%" stop-color="#FFF8E8"/>
+    </radialGradient>
+  </defs>
+  <!-- Outer crust shadow -->
+  <ellipse cx="52" cy="53" rx="44" ry="42" fill="#D4B050"/>
+  <!-- Main bagel body -->
+  <path d="M50 6 C75 6, 94 25, 94 50 C94 75, 75 94, 50 94 C25 94, 6 75, 6 50 C6 25, 25 6, 50 6" fill="url(#eggBagelGrad)"/>
+  <!-- Top highlight - brighter for egg bagel -->
+  <ellipse cx="38" cy="32" rx="22" ry="15" fill="#FFF4C8" opacity="0.6"/>
+  <!-- Subtle texture lines for egg wash sheen -->
+  <path d="M28 42 Q38 38, 45 45" stroke="#E8D070" stroke-width="1" fill="none" opacity="0.5"/>
+  <path d="M55 32 Q68 36, 75 48" stroke="#E8D070" stroke-width="1" fill="none" opacity="0.5"/>
+  <path d="M60 68 Q70 64, 74 55" stroke="#E8D070" stroke-width="0.8" fill="none" opacity="0.4"/>
+  <path d="M25 58 Q32 55, 38 62" stroke="#E8D070" stroke-width="0.8" fill="none" opacity="0.4"/>
+  <!-- Center hole with shadow -->
+  <ellipse cx="51" cy="52" rx="16" ry="15" fill="#C8A840"/>
+  <ellipse cx="50" cy="50" rx="15" ry="14" fill="url(#eggHoleGrad)"/>
+  <!-- Inner crust ring -->
+  <ellipse cx="50" cy="50" rx="18" ry="17" fill="none" stroke="#E8C55A" stroke-width="2" opacity="0.6"/>
+</svg>

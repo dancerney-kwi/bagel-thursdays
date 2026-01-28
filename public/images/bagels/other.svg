@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <radialGradient id="otherBagelGrad" cx="40%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#E8D4B8"/>
+      <stop offset="50%" stop-color="#D4C0A0"/>
+      <stop offset="100%" stop-color="#B8A890"/>
+    </radialGradient>
+    <radialGradient id="otherHoleGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FEFEFE"/>
+      <stop offset="100%" stop-color="#F0E8DC"/>
+    </radialGradient>
+  </defs>
+  <!-- Outer crust shadow -->
+  <ellipse cx="52" cy="53" rx="44" ry="42" fill="#9A8A7A"/>
+  <!-- Main bagel body -->
+  <path d="M50 6 C75 6, 94 25, 94 50 C94 75, 75 94, 50 94 C25 94, 6 75, 6 50 C6 25, 25 6, 50 6" fill="url(#otherBagelGrad)"/>
+  <!-- Top highlight -->
+  <ellipse cx="38" cy="32" rx="18" ry="12" fill="#F5EBD8" opacity="0.5"/>
+  <!-- Dotted suggestion circle -->
+  <circle cx="50" cy="50" r="34" fill="none" stroke="#8A7A6A" stroke-width="2" stroke-dasharray="5 4" opacity="0.6"/>
+  <!-- Question mark -->
+  <text x="50" y="58" font-family="Inter, Arial, sans-serif" font-size="26" font-weight="700" fill="#6A5A4A" text-anchor="middle">?</text>
+  <!-- Center hole with shadow -->
+  <ellipse cx="51" cy="52" rx="16" ry="15" fill="#8A7A6A"/>
+  <ellipse cx="50" cy="50" rx="15" ry="14" fill="url(#otherHoleGrad)"/>
+  <!-- Inner crust ring -->
+  <ellipse cx="50" cy="50" rx="18" ry="17" fill="none" stroke="#B8A890" stroke-width="2" opacity="0.6"/>
+</svg>

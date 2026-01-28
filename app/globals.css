@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+:root {
+  --color-primary: 28 107 224;     /* KWI Blue #1C6BE0 */
+  --color-red: 239 68 68;          /* Red for hearts #EF4444 */
+  --color-black: 26 26 26;         /* Near Black #1A1A1A */
+  --color-gray: 107 114 128;       /* Gray #6B7280 */
+  --color-gray-light: 156 163 175; /* Light Gray #9CA3AF */
+  --color-white: 255 255 255;      /* White #ffffff */
+
+  --background: #ffffff;
+  --foreground: #1A1A1A;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-primary: rgb(var(--color-primary));
+  --color-red: rgb(var(--color-red));
+  --color-gray: rgb(var(--color-gray));
+  --color-gray-light: rgb(var(--color-gray-light));
+  --font-sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}

@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <defs>
+    <radialGradient id="cinBagelGrad" cx="40%" cy="35%" r="60%">
+      <stop offset="0%" stop-color="#C8A060"/>
+      <stop offset="50%" stop-color="#A67C3D"/>
+      <stop offset="100%" stop-color="#8B6914"/>
+    </radialGradient>
+    <radialGradient id="cinHoleGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#FEFEFE"/>
+      <stop offset="100%" stop-color="#F8F0E0"/>
+    </radialGradient>
+  </defs>
+  <!-- Outer crust shadow -->
+  <ellipse cx="52" cy="53" rx="44" ry="42" fill="#6B4423"/>
+  <!-- Main bagel body -->
+  <path d="M50 6 C75 6, 94 25, 94 50 C94 75, 75 94, 50 94 C25 94, 6 75, 6 50 C6 25, 25 6, 50 6" fill="url(#cinBagelGrad)"/>
+  <!-- Top highlight -->
+  <ellipse cx="38" cy="32" rx="18" ry="12" fill="#D8B880" opacity="0.4"/>
+  <!-- Cinnamon swirls -->
+  <path d="M26 42 Q34 36, 42 44 Q48 52, 40 58" stroke="#5A3818" stroke-width="3" fill="none" opacity="0.5"/>
+  <path d="M58 32 Q66 38, 62 48 Q58 56, 66 62" stroke="#5A3818" stroke-width="3" fill="none" opacity="0.5"/>
+  <path d="M72 48 Q78 54, 74 62" stroke="#5A3818" stroke-width="2.5" fill="none" opacity="0.4"/>
+  <path d="M28 62 Q34 68, 30 76" stroke="#5A3818" stroke-width="2.5" fill="none" opacity="0.4"/>
+  <!-- Raisins - plump and shiny looking -->
+  <ellipse cx="32" cy="52" rx="5" ry="4" fill="#2D1B0E"/>
+  <ellipse cx="31" cy="51" rx="1.5" ry="1" fill="#4D3B2E" opacity="0.6"/>
+  <ellipse cx="48" cy="28" rx="4.5" ry="3.5" fill="#3D2B1E"/>
+  <ellipse cx="47" cy="27" rx="1.2" ry="0.8" fill="#5D4B3E" opacity="0.6"/>
+  <ellipse cx="70" cy="42" rx="5" ry="4" fill="#2D1B0E"/>
+  <ellipse cx="69" cy="41" rx="1.5" ry="1" fill="#4D3B2E" opacity="0.6"/>
+  <ellipse cx="58" cy="75" rx="4.5" ry="3.5" fill="#3D2B1E"/>
+  <ellipse cx="57" cy="74" rx="1.2" ry="0.8" fill="#5D4B3E" opacity="0.6"/>
+  <ellipse cx="26" cy="35" rx="4" ry="3" fill="#2D1B0E"/>
+  <ellipse cx="76" cy="60" rx="4" ry="3" fill="#3D2B1E"/>
+  <ellipse cx="40" cy="78" rx="3.5" ry="2.8" fill="#2D1B0E"/>
+  <!-- Center hole with shadow -->
+  <ellipse cx="51" cy="52" rx="16" ry="15" fill="#5A3818"/>
+  <ellipse cx="50" cy="50" rx="15" ry="14" fill="url(#cinHoleGrad)"/>
+  <!-- Inner crust ring -->
+  <ellipse cx="50" cy="50" rx="18" ry="17" fill="none" stroke="#8B6914" stroke-width="2" opacity="0.5"/>
+</svg>
