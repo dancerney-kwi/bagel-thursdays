@@ -7,6 +7,7 @@ import {
   getNextResetTime,
   getCountdownValues,
 } from '@/lib/utils/dates';
+import { getCurrentTime, isDebugMode } from '@/lib/utils/debug';
 import type { CycleState, CountdownValues } from '@/lib/types';
 
 interface CountdownUnitProps {
@@ -53,11 +54,27 @@ export default function Countdown() {
     minutes: 0,
     seconds: 0,
   });
+  const [debugActive, setDebugActive] = useState(false);
+  const [debugTimeStr, setDebugTimeStr] = useState('');
 
   const updateCountdown = useCallback(() => {
-    const now = new Date();
+    const now = getCurrentTime();
     const state = getCurrentCycleState(now);
     setCycleState(state);
+
+    // Check debug mode
+    const debug = isDebugMode();
+    setDebugActive(debug);
+    if (debug) {
+      setDebugTimeStr(now.toLocaleString('en-US', {
+        weekday: 'long',
+        month: 'short',
+        day: 'numeric',
+        hour: 'numeric',
+        minute: '2-digit',
+        timeZoneName: 'short'
+      }));
+    }
 
     // Determine target time based on state
     let targetTime: Date;
@@ -85,9 +102,16 @@ export default function Countdown() {
     };
   }, [updateCountdown]);
 
+  const debugBanner = debugActive && (
+    <div className="mb-4 rounded-lg bg-yellow-100 px-3 py-2 text-xs font-medium text-yellow-800">
+      Debug Mode: {debugTimeStr}
+    </div>
+  );
+
   if (cycleState === 'closed' || cycleState === 'reset-pending') {
     return (
       <div className="rounded-2xl border border-gray-light/20 bg-white p-6 text-center shadow-lg shadow-black/5 sm:p-8">
+        {debugBanner}
         <p className="mb-2 text-lg font-bold text-foreground sm:text-xl">
           Orders closed! Bagels arriving Thursday morning
         </p>
@@ -104,6 +128,7 @@ export default function Countdown() {
 
   return (
     <div className="rounded-2xl border border-gray-light/20 bg-white p-6 text-center shadow-lg shadow-black/5 sm:p-8">
+      {debugBanner}
       <p className="mb-4 text-sm font-medium text-foreground sm:text-base">
         Time remaining to submit your order
       </p>

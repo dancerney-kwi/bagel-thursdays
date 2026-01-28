@@ -17,6 +17,7 @@ import {
   normalizeUserName,
 } from '@/lib/utils/storage';
 import { getCurrentWeekId, isBeforeCutoff } from '@/lib/utils/dates';
+import { getCurrentTime } from '@/lib/utils/debug';
 import { getBagelName } from '@/lib/constants/bagels';
 import { UI } from '@/lib/constants/config';
 import type { BagelTypeId } from '@/lib/types';
@@ -55,11 +56,11 @@ export default function Home() {
     }
 
     // Check if ordering is open
-    setIsOrderingOpen(isBeforeCutoff());
+    setIsOrderingOpen(isBeforeCutoff(getCurrentTime()));
 
     // Re-check every minute in case cutoff passes while page is open
     const intervalId = setInterval(() => {
-      setIsOrderingOpen(isBeforeCutoff());
+      setIsOrderingOpen(isBeforeCutoff(getCurrentTime()));
     }, 60000);
 
     return () => clearInterval(intervalId);
