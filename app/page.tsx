@@ -152,130 +152,134 @@ export default function Home() {
         </p>
       </header>
 
-      <main className="flex w-full max-w-4xl flex-col gap-8">
+      <main className="flex w-full max-w-6xl flex-col gap-8">
         {/* Countdown Timer */}
         <Countdown />
 
         {/* Bagel Facts Carousel */}
         <BagelFacts />
 
-        {/* Order Form */}
-        <section className="rounded-2xl border border-gray-light/20 bg-white p-6 shadow-lg shadow-black/5 sm:p-8">
-          {/* Name Input */}
-          <div className="mb-6">
-            <label
-              htmlFor="user-name"
-              className="mb-3 block text-xl font-black tracking-tight text-foreground sm:text-2xl"
-            >
-              Your <span className="text-primary">Name</span>
-            </label>
-            <input
-              type="text"
-              id="user-name"
-              value={userName}
-              onChange={handleNameChange}
-              disabled={isFormDisabled}
-              placeholder="First Name Last Initial (e.g., John D)"
-              maxLength={UI.USER_NAME_MAX_LENGTH}
-              className={`
-                w-full rounded-xl border-2 border-gray-light/30 bg-gray-light/5 px-4 py-3.5 text-lg font-medium text-foreground
-                placeholder:text-gray-light/70
-                focus:border-primary focus:bg-white focus:outline-none focus:ring-4 focus:ring-primary/10
-                disabled:cursor-not-allowed disabled:opacity-50
-              `}
-            />
-            <p className="mt-2 text-xs text-gray">
-              Please use the same name spelling each week for order history tracking. Your name will not be displayed publicly.
-            </p>
-          </div>
+        {/* Order Form + Tally Board Side by Side on Desktop */}
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-start">
+          {/* Order Form */}
+          <section className="flex-1 rounded-2xl border border-gray-light/20 bg-white p-6 shadow-lg shadow-black/5 sm:p-8 lg:max-w-2xl">
+            {/* Name Input */}
+            <div className="mb-6">
+              <label
+                htmlFor="user-name"
+                className="mb-3 block text-xl font-black tracking-tight text-foreground sm:text-2xl"
+              >
+                Your <span className="text-primary">Name</span>
+              </label>
+              <input
+                type="text"
+                id="user-name"
+                value={userName}
+                onChange={handleNameChange}
+                disabled={isFormDisabled}
+                placeholder="First Name Last Initial (e.g., John D)"
+                maxLength={UI.USER_NAME_MAX_LENGTH}
+                className={`
+                  w-full rounded-xl border-2 border-gray-light/30 bg-gray-light/5 px-4 py-3.5 text-lg font-medium text-foreground
+                  placeholder:text-gray-light/70
+                  focus:border-primary focus:bg-white focus:outline-none focus:ring-4 focus:ring-primary/10
+                  disabled:cursor-not-allowed disabled:opacity-50
+                `}
+              />
+              <p className="mt-2 text-xs text-gray">
+                Please use the same name spelling each week for order history tracking. Your name will not be displayed publicly.
+              </p>
+            </div>
 
-          {/* Bagel Selector */}
-          <div className="border-t border-gray-light/20 pt-6">
+            {/* Bagel Selector */}
+            <div className="border-t border-gray-light/20 pt-6">
+              <h2 className="mb-4 text-xl font-black tracking-tight text-foreground sm:text-2xl">
+                Select Your <span className="text-primary">Bagel</span>
+              </h2>
+              <BagelSelector
+                selectedBagel={selectedBagel}
+                customBagel={customBagel}
+                onBagelSelect={setSelectedBagel}
+                onCustomBagelChange={setCustomBagel}
+                disabled={isFormDisabled}
+                compact
+              />
+            </div>
+
+            {/* Error message */}
+            {submitError && (
+              <div className="mt-4 rounded-lg bg-red-50 p-3 text-center text-sm text-red-600">
+                {submitError}
+              </div>
+            )}
+
+            {/* Submit Button */}
+            <div className="mt-6">
+              <button
+                type="button"
+                onClick={handleSubmit}
+                disabled={!canSubmit}
+                className={`
+                  flex w-full items-center justify-center gap-2.5 rounded-full px-8 py-4 text-sm font-semibold uppercase tracking-wider transition-all
+                  ${canSubmit
+                    ? 'bg-primary text-white shadow-lg shadow-primary/25 hover:bg-primary/90 hover:shadow-xl hover:shadow-primary/30 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2'
+                    : 'cursor-not-allowed bg-gray-light/30 text-gray'
+                  }
+                `}
+              >
+                {isSubmitting ? (
+                  <>
+                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                    Submitting...
+                  </>
+                ) : hasSubmitted ? (
+                  'Order Submitted!'
+                ) : !isOrderingOpen ? (
+                  'Orders Closed'
+                ) : (
+                  <>
+                    Submit Order
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                    </svg>
+                  </>
+                )}
+              </button>
+            </div>
+
+            {/* Submission confirmation */}
+            {hasSubmitted && selectedBagel && (
+              <div className="mt-4 rounded-xl bg-primary/10 p-4 text-center">
+                <p className="font-medium text-primary">
+                  {userName}'s order: {getSubmittedBagelDisplay()}
+                </p>
+                <p className="mt-1 text-sm text-gray">
+                  Thank you! Your bagel preference has been recorded.
+                </p>
+              </div>
+            )}
+
+            {/* Orders closed message */}
+            {!isOrderingOpen && !hasSubmitted && (
+              <div className="mt-4 rounded-xl bg-gray-light/10 p-4 text-center">
+                <p className="font-medium text-foreground">
+                  Orders for this week are closed
+                </p>
+                <p className="mt-1 text-sm text-gray">
+                  New orders open Friday at midnight EST
+                </p>
+              </div>
+            )}
+          </section>
+
+          {/* Tally Board */}
+          <section className="w-full rounded-2xl border border-gray-light/20 bg-white p-6 shadow-lg shadow-black/5 sm:p-8 lg:w-72 lg:flex-shrink-0">
             <h2 className="mb-4 text-xl font-black tracking-tight text-foreground sm:text-2xl">
-              Select Your <span className="text-primary">Bagel</span>
+              Current <span className="text-primary">Tally</span>
             </h2>
-            <BagelSelector
-              selectedBagel={selectedBagel}
-              customBagel={customBagel}
-              onBagelSelect={setSelectedBagel}
-              onCustomBagelChange={setCustomBagel}
-              disabled={isFormDisabled}
-            />
-          </div>
-
-          {/* Error message */}
-          {submitError && (
-            <div className="mt-4 rounded-lg bg-red-50 p-3 text-center text-sm text-red-600">
-              {submitError}
-            </div>
-          )}
-
-          {/* Submit Button */}
-          <div className="mt-6">
-            <button
-              type="button"
-              onClick={handleSubmit}
-              disabled={!canSubmit}
-              className={`
-                flex w-full items-center justify-center gap-2.5 rounded-full px-8 py-4 text-sm font-semibold uppercase tracking-wider transition-all
-                ${canSubmit
-                  ? 'bg-primary text-white shadow-lg shadow-primary/25 hover:bg-primary/90 hover:shadow-xl hover:shadow-primary/30 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2'
-                  : 'cursor-not-allowed bg-gray-light/30 text-gray'
-                }
-              `}
-            >
-              {isSubmitting ? (
-                <>
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                  Submitting...
-                </>
-              ) : hasSubmitted ? (
-                'Order Submitted!'
-              ) : !isOrderingOpen ? (
-                'Orders Closed'
-              ) : (
-                <>
-                  Submit Order
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                  </svg>
-                </>
-              )}
-            </button>
-          </div>
-
-          {/* Submission confirmation */}
-          {hasSubmitted && selectedBagel && (
-            <div className="mt-4 rounded-xl bg-primary/10 p-4 text-center">
-              <p className="font-medium text-primary">
-                {userName}'s order: {getSubmittedBagelDisplay()}
-              </p>
-              <p className="mt-1 text-sm text-gray">
-                Thank you! Your bagel preference has been recorded.
-              </p>
-            </div>
-          )}
-
-          {/* Orders closed message */}
-          {!isOrderingOpen && !hasSubmitted && (
-            <div className="mt-4 rounded-xl bg-gray-light/10 p-4 text-center">
-              <p className="font-medium text-foreground">
-                Orders for this week are closed
-              </p>
-              <p className="mt-1 text-sm text-gray">
-                New orders open Friday at midnight EST
-              </p>
-            </div>
-          )}
-        </section>
-
-        {/* Tally Board */}
-        <section className="rounded-2xl border border-gray-light/20 bg-white p-6 shadow-lg shadow-black/5 sm:p-8">
-          <h2 className="mb-4 text-xl font-black tracking-tight text-foreground sm:text-2xl">
-            Current <span className="text-primary">Tally</span>
-          </h2>
-          {isClient && <TallyBoard />}
-        </section>
+            {isClient && <TallyBoard />}
+          </section>
+        </div>
 
         {/* Spread Requests */}
         <section className="rounded-2xl border border-gray-light/20 bg-white p-6 shadow-lg shadow-black/5 sm:p-8">

@@ -98,6 +98,7 @@ interface BagelSelectorProps {
   onBagelSelect: (id: BagelTypeId) => void;
   onCustomBagelChange: (value: string) => void;
   disabled?: boolean;
+  compact?: boolean;
 }
 
 export default function BagelSelector({
@@ -106,6 +107,7 @@ export default function BagelSelector({
   onBagelSelect,
   onCustomBagelChange,
   disabled = false,
+  compact = false,
 }: BagelSelectorProps) {
   const handleCustomInputChange = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -120,7 +122,7 @@ export default function BagelSelector({
       <fieldset disabled={disabled}>
         <legend className="sr-only">Select your bagel type</legend>
 
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+        <div className={`grid gap-3 ${compact ? 'grid-cols-2 sm:grid-cols-3' : 'grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5'}`}>
           {BAGEL_TYPES.map((bagel) => (
             <BagelCard
               key={bagel.id}
