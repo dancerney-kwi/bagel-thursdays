@@ -2,8 +2,8 @@
 
 ## KWI Bagel Thursdays
 
-**Version**: 1.0.0
-**Last Updated**: January 2026
+**Version**: 1.1.0
+**Last Updated**: January 29, 2026
 **Status**: Active Development
 
 ---
@@ -86,11 +86,18 @@ Display time remaining until the order deadline.
 **Requirements**:
 - Show days, hours, minutes, seconds
 - Update every second
-- Display different messages based on cycle state:
-  - Collecting: "Time remaining to submit your order"
-  - Closed: "Orders closed! Bagels arriving Thursday morning"
-  - Reset pending: "New week starting Friday at midnight!"
-- Include deadline reminder: "Orders close Wednesday at 12:00 PM EST"
+- Display different layouts based on cycle state:
+  - **Collecting** (orders open):
+    - "Time remaining to submit your order" (above countdown)
+    - Countdown to Wednesday 12PM cutoff
+    - "Orders close Wednesday at 12:00 PM EST" (below)
+  - **Closed** (after cutoff):
+    - "Orders closed! Bagels arriving Thursday morning" (top)
+    - "Next week's submissions open in:" (above countdown)
+    - Countdown to Friday midnight reset
+    - "Orders close Wednesday at 12:00 PM EST" (below)
+- Form inputs disabled when orders are closed
+- "Orders Closed" message shown on submit button when closed
 
 #### F4: Real-Time Tally
 Display aggregated bagel counts.
@@ -385,8 +392,30 @@ See [DATABASE.md](DATABASE.md) for complete schema.
 
 ---
 
-## 7. Revision History
+## 8. Development Tools
+
+### Debug Mode (Development Only)
+
+For testing the app at different time states without changing system clock:
+
+**Usage**: Add `?debug_time=` parameter to URL
+
+| Scenario | URL Parameter |
+|----------|---------------|
+| Wednesday morning (open) | `?debug_time=2026-01-28T10:00:00` |
+| Wednesday afternoon (closed) | `?debug_time=2026-01-28T14:00:00` |
+| Thursday (closed) | `?debug_time=2026-01-29T10:00:00` |
+| Friday morning (open) | `?debug_time=2026-01-30T09:00:00` |
+
+- Only works when `NODE_ENV=development`
+- Yellow banner displays simulated time
+- Affects countdown display and form enabled/disabled state
+
+---
+
+## 9. Revision History
 
 | Version | Date | Author | Changes |
 |---------|------|--------|---------|
 | 1.0.0 | Jan 2026 | Initial | Initial PRD |
+| 1.1.0 | Jan 29, 2026 | Update | Added closed state countdown behavior, form disabling when closed, debug mode documentation |
