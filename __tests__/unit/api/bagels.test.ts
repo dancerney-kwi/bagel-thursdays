@@ -8,6 +8,7 @@ const mockFrom = vi.fn();
 const mockUpsert = vi.fn();
 const mockSelect = vi.fn();
 const mockSingle = vi.fn();
+const mockLike = vi.fn();
 
 vi.mock('@/lib/supabase/server', () => ({
   createAdminClient: () => ({
@@ -25,10 +26,14 @@ describe('Bagels API', () => {
   beforeEach(() => {
     vi.clearAllMocks();
 
-    // Setup chain for upsert
-    mockFrom.mockReturnValue({ upsert: mockUpsert });
+    // Setup chain for upsert (POST)
+    mockFrom.mockReturnValue({
+      upsert: mockUpsert,
+      select: mockSelect,
+    });
     mockUpsert.mockReturnValue({ select: mockSelect });
-    mockSelect.mockReturnValue({ single: mockSingle });
+    mockSelect.mockReturnValue({ single: mockSingle, like: mockLike });
+    mockLike.mockResolvedValue({ count: 42, error: null });
   });
 
   describe('GET /api/bagels', () => {

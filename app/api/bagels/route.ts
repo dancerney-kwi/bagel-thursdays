@@ -9,6 +9,7 @@ export async function GET(request: NextRequest) {
     const supabase = createAdminClient();
     const weekId = request.nextUrl.searchParams.get('week_id') || getCurrentWeekId();
 
+    // Get current week tallies
     const { data, error } = await supabase
       .rpc('get_current_week_tallies', { current_week_id: weekId } as any);
 
@@ -20,7 +21,24 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    return NextResponse.json({ tallies: data, weekId });
+    // Get year-to-date total (count all submissions for the current year)
+    const currentYear = new Date().getFullYear().toString();
+    const { count: ytdCount, error: ytdError } = await supabase
+      .from('bagel_submissions' as any)
+      .select('*', { count: 'exact', head: true })
+      .like('week_id', `${currentYear}-%`);
+
+    if (ytdError) {
+      console.error('Error fetching YTD count:', ytdError);
+      // Don't fail the whole request, just omit YTD data
+    }
+
+    return NextResponse.json({
+      tallies: data,
+      weekId,
+      ytdTotal: ytdCount || 0,
+      year: currentYear
+    });
   } catch (error) {
     console.error('Unexpected error:', error);
     return NextResponse.json(

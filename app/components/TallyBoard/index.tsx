@@ -19,6 +19,8 @@ interface TallyBoardProps {
 
 export default function TallyBoard({ onTalliesUpdate }: TallyBoardProps) {
   const [tallies, setTallies] = useState<BagelTally[]>([]);
+  const [ytdTotal, setYtdTotal] = useState(0);
+  const [currentYear, setCurrentYear] = useState('');
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -30,6 +32,8 @@ export default function TallyBoard({ onTalliesUpdate }: TallyBoardProps) {
       }
       const data = await response.json();
       setTallies(data.tallies || []);
+      setYtdTotal(data.ytdTotal || 0);
+      setCurrentYear(data.year || new Date().getFullYear().toString());
       setError(null);
 
       // Notify parent of total count
@@ -85,6 +89,16 @@ export default function TallyBoard({ onTalliesUpdate }: TallyBoardProps) {
   // Calculate total for display
   const totalOrders = tallies.reduce((sum, t) => sum + t.count, 0);
 
+  // Calculate dozens (to 1 decimal place)
+  const formatDozens = (count: number) => {
+    const dozens = count / 12;
+    // Show as whole number if even, otherwise 1 decimal
+    return dozens % 1 === 0 ? dozens.toString() : dozens.toFixed(1);
+  };
+
+  const weeklyDozens = formatDozens(totalOrders);
+  const ytdDozens = formatDozens(ytdTotal);
+
   // Get max count for progress bar scaling
   const maxCount = Math.max(...tallies.map((t) => t.count), 1);
 
@@ -120,12 +134,17 @@ export default function TallyBoard({ onTalliesUpdate }: TallyBoardProps) {
 
   return (
     <div className="space-y-4">
-      {/* Total counter */}
-      <div className="mb-6 text-center">
-        <span className="text-4xl font-extrabold text-primary">{totalOrders}</span>
-        <span className="ml-2 text-gray">
-          {totalOrders === 1 ? 'order' : 'orders'} this week
-        </span>
+      {/* Weekly total */}
+      <div className="text-center">
+        <div>
+          <span className="text-4xl font-extrabold text-primary">{totalOrders}</span>
+          <span className="ml-2 text-gray">
+            {totalOrders === 1 ? 'order' : 'orders'}
+          </span>
+        </div>
+        <div className="mt-1 text-sm text-gray">
+          ({weeklyDozens} {parseFloat(weeklyDozens) === 1 ? 'dozen' : 'dozen'})
+        </div>
       </div>
 
       {/* Tally bars */}
@@ -169,6 +188,20 @@ export default function TallyBoard({ onTalliesUpdate }: TallyBoardProps) {
             </div>
           );
         })}
+      </div>
+
+      {/* Year-to-date stats */}
+      <div className="mt-6 border-t border-gray-light/20 pt-4">
+        <h3 className="mb-2 text-sm font-bold uppercase tracking-wider text-gray">
+          {currentYear} Year to Date
+        </h3>
+        <div className="flex items-baseline gap-2">
+          <span className="text-2xl font-extrabold text-foreground">{ytdTotal}</span>
+          <span className="text-sm text-gray">bagels</span>
+        </div>
+        <div className="text-sm text-gray">
+          ({ytdDozens} dozen)
+        </div>
       </div>
     </div>
   );
