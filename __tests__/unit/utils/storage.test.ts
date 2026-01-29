@@ -7,6 +7,7 @@ import {
   clearSubmission,
   clearExpiredSubmissions,
   getAllSubmissionWeekIds,
+  normalizeUserName,
 } from '@/lib/utils/storage';
 import { STORAGE_KEYS } from '@/lib/constants/config';
 import { installMockLocalStorage, MockLocalStorage } from '../../mocks/storage';
@@ -208,6 +209,38 @@ describe('Browser Storage Utility', () => {
 
       expect(weekIds).toHaveLength(1);
       expect(weekIds).toContain('2025-W04');
+    });
+  });
+
+  describe('normalizeUserName', () => {
+    it('should trim whitespace', () => {
+      expect(normalizeUserName('  John D  ')).toBe('John D');
+    });
+
+    it('should capitalize first letter of each part', () => {
+      expect(normalizeUserName('john d')).toBe('John D');
+      expect(normalizeUserName('JANE S')).toBe('Jane S');
+    });
+
+    it('should remove trailing periods', () => {
+      expect(normalizeUserName('John D.')).toBe('John D');
+      expect(normalizeUserName('Jane S...')).toBe('Jane S');
+    });
+
+    it('should handle multiple spaces between parts', () => {
+      expect(normalizeUserName('John    D')).toBe('John D');
+    });
+
+    it('should handle mixed case with trailing period', () => {
+      expect(normalizeUserName('  JOHN d.  ')).toBe('John D');
+    });
+
+    it('should handle single name', () => {
+      expect(normalizeUserName('john')).toBe('John');
+    });
+
+    it('should handle empty string', () => {
+      expect(normalizeUserName('')).toBe('');
     });
   });
 });

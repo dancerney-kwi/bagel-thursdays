@@ -72,14 +72,20 @@ function safeRemoveItem(key: string): boolean {
 }
 
 /**
- * Normalize a user name: trim whitespace and capitalize properly
- * e.g., "  john d  " -> "John D"
+ * Normalize a user name: trim whitespace, capitalize properly, remove trailing periods
+ * e.g., "  john d.  " -> "John D"
+ * e.g., "  JANE S  " -> "Jane S"
+ * This ensures consistent formatting in the database regardless of how users type their name
  */
 export function normalizeUserName(name: string): string {
   return name
     .trim()
     .split(/\s+/)
-    .map((part) => part.charAt(0).toUpperCase() + part.slice(1).toLowerCase())
+    .map((part) => {
+      // Remove trailing periods from each part (e.g., "D." -> "D")
+      const cleaned = part.replace(/\.+$/, '');
+      return cleaned.charAt(0).toUpperCase() + cleaned.slice(1).toLowerCase();
+    })
     .join(' ');
 }
 

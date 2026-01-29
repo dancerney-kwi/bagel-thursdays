@@ -2,7 +2,7 @@
 
 ## KWI Bagel Thursdays
 
-**Version**: 1.2.0
+**Version**: 1.3.0
 **Last Updated**: January 29, 2026
 **Status**: Active Development
 
@@ -77,6 +77,14 @@ Users enter their name for order tracking.
 - Name stored in database with submission
 - Names NOT displayed publicly (privacy)
 - Max length: 50 characters
+
+**Name Normalization**:
+Names are automatically normalized for database consistency:
+- Trim whitespace: `"  John D  "` → `"John D"`
+- Capitalize properly: `"john d"` → `"John D"`
+- Remove trailing periods: `"John D."` → `"John D"`
+
+This ensures "Dan C" and "Dan C." are stored identically.
 
 **Privacy Note**: User names are stored locally and in the database but are never displayed to other users. The public tally view is completely anonymous.
 
@@ -264,6 +272,13 @@ Acceptance Criteria:
 - Display prominently at top, centered
 - Size: 320x100px
 
+**Favicon**: Bagel emoji (🥯)
+
+**Link Preview (Open Graph)**:
+- Title: "KWI Bagel Thursdays"
+- Description: "Carbs. Colleagues. Chaos. Submit your weekly bagel order before Wednesday noon or forever hold your hunger."
+- Image: KWI logo
+
 **Colors**:
 | Name | Hex | CSS Variable |
 |------|-----|--------------|
@@ -428,3 +443,4 @@ For testing the app at different time states without changing system clock:
 | 1.0.0 | Jan 2026 | Initial | Initial PRD |
 | 1.1.0 | Jan 29, 2026 | Update | Added closed state countdown behavior, form disabling when closed, debug mode documentation |
 | 1.2.0 | Jan 29, 2026 | Update | Side-by-side layout for order form + tally on desktop, dozens count display, year-to-date statistics with auto-reset |
+| 1.3.0 | Jan 29, 2026 | Update | Bagel emoji favicon, Open Graph meta tags for link previews, name normalization (strips trailing periods) |
