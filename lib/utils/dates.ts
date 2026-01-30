@@ -163,14 +163,14 @@ export function getCountdownValues(
 
 /**
  * Get the bagel cycle week identifier
- * Format: YYYY-WXX (e.g., "2026-W05")
+ * Format: YYYY-MM-DD (the Friday that starts the week, e.g., "2026-01-30")
  *
  * The bagel week runs Friday 12AM EST to Thursday 11:59PM EST.
- * The week ID is based on the Friday that starts each cycle.
+ * Using the Friday date as the ID eliminates week number ambiguity.
  *
- * Examples (assuming Friday = day 5):
- * - Friday Jan 31 through Thursday Feb 6 → week starting Jan 31
- * - On Thursday, we're still in the week that started the previous Friday
+ * Examples:
+ * - Friday Jan 30 through Thursday Feb 5 → "2026-01-30"
+ * - On Thursday Feb 5, we're still in week "2026-01-30"
  */
 export function getCurrentWeekId(referenceDate: Date = new Date()): string {
   const nowInTz = toZonedTime(referenceDate, TIMEZONE);
@@ -190,11 +190,8 @@ export function getCurrentWeekId(referenceDate: Date = new Date()): string {
   // Get the Friday that started this bagel week
   const bagelWeekStart = addDays(nowInTz, -daysBackToFriday);
 
-  // Use calendar year of the Friday and week number
-  // Note: Using explicit year to avoid ISO week-year edge cases
-  const year = bagelWeekStart.getFullYear();
-  const weekNum = format(bagelWeekStart, 'ww');
-  return `${year}-W${weekNum}`;
+  // Use the Friday date as the week ID (unambiguous)
+  return format(bagelWeekStart, 'yyyy-MM-dd');
 }
 
 /**

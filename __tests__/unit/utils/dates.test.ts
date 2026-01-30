@@ -186,11 +186,13 @@ describe('Date/Time Utilities', () => {
   });
 
   describe('getCurrentWeekId', () => {
-    it('should return week identifier in correct format', () => {
+    it('should return week identifier as Friday date (YYYY-MM-DD format)', () => {
+      // Monday Jan 27, 2025 - bagel week started Friday Jan 24
       const date = new Date('2025-01-27T15:00:00.000Z');
       const weekId = getCurrentWeekId(date);
 
-      expect(weekId).toMatch(/^\d{4}-W\d{2}$/);
+      expect(weekId).toMatch(/^\d{4}-\d{2}-\d{2}$/);
+      expect(weekId).toBe('2025-01-24'); // The Friday that started this bagel week
     });
 
     it('should return same week ID for dates in same bagel week (Friday-Thursday)', () => {
@@ -202,17 +204,26 @@ describe('Date/Time Utilities', () => {
       const thursday = new Date('2025-02-06T15:00:00.000Z');
 
       // All should be in the same bagel week (started Friday Jan 31)
-      expect(getCurrentWeekId(friday)).toBe(getCurrentWeekId(saturday));
-      expect(getCurrentWeekId(friday)).toBe(getCurrentWeekId(monday));
-      expect(getCurrentWeekId(friday)).toBe(getCurrentWeekId(thursday));
+      const expectedWeekId = '2025-01-31';
+      expect(getCurrentWeekId(friday)).toBe(expectedWeekId);
+      expect(getCurrentWeekId(saturday)).toBe(expectedWeekId);
+      expect(getCurrentWeekId(monday)).toBe(expectedWeekId);
+      expect(getCurrentWeekId(thursday)).toBe(expectedWeekId);
     });
 
     it('should return different week ID when bagel week changes on Friday', () => {
-      // Thursday Jan 30 is in previous week, Friday Jan 31 starts new week
+      // Thursday Jan 30 is in previous week (started Jan 24), Friday Jan 31 starts new week
       const thursdayPrevWeek = new Date('2025-01-30T15:00:00.000Z');
       const fridayNewWeek = new Date('2025-01-31T15:00:00.000Z');
 
-      expect(getCurrentWeekId(thursdayPrevWeek)).not.toBe(getCurrentWeekId(fridayNewWeek));
+      expect(getCurrentWeekId(thursdayPrevWeek)).toBe('2025-01-24');
+      expect(getCurrentWeekId(fridayNewWeek)).toBe('2025-01-31');
+    });
+
+    it('should use current year correctly', () => {
+      // Friday Jan 30, 2026 at 10 AM EST
+      const friday2026 = new Date('2026-01-30T15:00:00.000Z');
+      expect(getCurrentWeekId(friday2026)).toBe('2026-01-30');
     });
   });
 
