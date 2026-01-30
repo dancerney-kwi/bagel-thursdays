@@ -2,8 +2,8 @@
 
 ## KWI Bagel Thursdays
 
-**Version**: 1.3.0
-**Last Updated**: January 29, 2026
+**Version**: 1.4.0
+**Last Updated**: January 30, 2026
 **Status**: Active Development
 
 ---
@@ -158,6 +158,14 @@ Display rotating fun facts about bagels.
 | Order Cutoff | Wednesday 12:00 PM EST |
 | Week Reset | Friday 12:00 AM EST |
 | Timezone | America/New_York |
+
+**Bagel Week Cycle**:
+The bagel week runs Friday 12:00 AM EST through Thursday 11:59 PM EST:
+- **Friday 12AM - Wednesday 12PM**: Orders open (collecting)
+- **Wednesday 12PM - Thursday 11:59PM**: Orders closed (awaiting delivery)
+- **Friday 12AM**: New week begins, tally resets
+
+The week ID (used for database queries) is based on the Friday that starts each cycle, not the calendar week. This ensures the tally resets correctly at Friday midnight.
 
 ### 2.3 Non-Functional Requirements
 
@@ -444,3 +452,4 @@ For testing the app at different time states without changing system clock:
 | 1.1.0 | Jan 29, 2026 | Update | Added closed state countdown behavior, form disabling when closed, debug mode documentation |
 | 1.2.0 | Jan 29, 2026 | Update | Side-by-side layout for order form + tally on desktop, dozens count display, year-to-date statistics with auto-reset |
 | 1.3.0 | Jan 29, 2026 | Update | Bagel emoji favicon, Open Graph meta tags for link previews, name normalization (strips trailing periods) |
+| 1.4.0 | Jan 30, 2026 | Fix | Fixed week ID to align with bagel cycle (Friday-Thursday) instead of calendar week; tally now resets correctly on Fridays |

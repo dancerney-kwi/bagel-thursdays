@@ -193,20 +193,26 @@ describe('Date/Time Utilities', () => {
       expect(weekId).toMatch(/^\d{4}-W\d{2}$/);
     });
 
-    it('should return same week ID for dates in same week', () => {
-      const monday = new Date('2025-01-27T15:00:00.000Z');
-      const wednesday = new Date('2025-01-29T15:00:00.000Z');
+    it('should return same week ID for dates in same bagel week (Friday-Thursday)', () => {
+      // Bagel week runs Friday 12AM to Thursday 11:59PM
+      // Friday Jan 31, 2025 starts a new bagel week
+      const friday = new Date('2025-01-31T15:00:00.000Z');
       const saturday = new Date('2025-02-01T15:00:00.000Z');
+      const monday = new Date('2025-02-03T15:00:00.000Z');
+      const thursday = new Date('2025-02-06T15:00:00.000Z');
 
-      expect(getCurrentWeekId(monday)).toBe(getCurrentWeekId(wednesday));
-      expect(getCurrentWeekId(monday)).toBe(getCurrentWeekId(saturday));
+      // All should be in the same bagel week (started Friday Jan 31)
+      expect(getCurrentWeekId(friday)).toBe(getCurrentWeekId(saturday));
+      expect(getCurrentWeekId(friday)).toBe(getCurrentWeekId(monday));
+      expect(getCurrentWeekId(friday)).toBe(getCurrentWeekId(thursday));
     });
 
-    it('should return different week ID for dates in different weeks', () => {
-      const week1 = new Date('2025-01-27T15:00:00.000Z');
-      const week2 = new Date('2025-02-03T15:00:00.000Z');
+    it('should return different week ID when bagel week changes on Friday', () => {
+      // Thursday Jan 30 is in previous week, Friday Jan 31 starts new week
+      const thursdayPrevWeek = new Date('2025-01-30T15:00:00.000Z');
+      const fridayNewWeek = new Date('2025-01-31T15:00:00.000Z');
 
-      expect(getCurrentWeekId(week1)).not.toBe(getCurrentWeekId(week2));
+      expect(getCurrentWeekId(thursdayPrevWeek)).not.toBe(getCurrentWeekId(fridayNewWeek));
     });
   });
 

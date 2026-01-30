@@ -162,17 +162,36 @@ export function getCountdownValues(
 }
 
 /**
- * Get ISO week identifier for the current cycle
- * Format: YYYY-WXX (e.g., "2025-W04")
+ * Get the bagel cycle week identifier
+ * Format: YYYY-WXX (e.g., "2026-W05")
+ *
+ * The bagel week runs Friday 12AM EST to Thursday 11:59PM EST.
+ * The week ID is based on the Friday that starts each cycle.
+ *
+ * Examples (assuming Friday = day 5):
+ * - Friday Jan 31 through Thursday Feb 6 → week starting Jan 31
+ * - On Thursday, we're still in the week that started the previous Friday
  */
 export function getCurrentWeekId(referenceDate: Date = new Date()): string {
   const nowInTz = toZonedTime(referenceDate, TIMEZONE);
+  const currentDay = getDay(nowInTz); // 0=Sunday, 5=Friday
 
-  // Get the start of the week (Sunday)
-  const weekStart = startOfWeek(nowInTz, { weekStartsOn: 0 });
+  // Calculate days back to the most recent Friday (start of bagel week)
+  // Friday=5, Saturday=6, Sunday=0, Monday=1, Tuesday=2, Wednesday=3, Thursday=4
+  let daysBackToFriday: number;
+  if (currentDay >= 5) {
+    // Friday or Saturday: current week started this Friday or yesterday
+    daysBackToFriday = currentDay - 5;
+  } else {
+    // Sunday through Thursday: week started last Friday
+    daysBackToFriday = currentDay + 2; // Sunday=2, Monday=3, ..., Thursday=6
+  }
 
-  // Format as ISO week
-  return format(weekStart, "yyyy-'W'ww");
+  // Get the Friday that started this bagel week
+  const bagelWeekStart = addDays(nowInTz, -daysBackToFriday);
+
+  // Format using ISO week of that Friday
+  return format(bagelWeekStart, "yyyy-'W'ww");
 }
 
 /**
