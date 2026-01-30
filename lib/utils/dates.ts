@@ -190,8 +190,11 @@ export function getCurrentWeekId(referenceDate: Date = new Date()): string {
   // Get the Friday that started this bagel week
   const bagelWeekStart = addDays(nowInTz, -daysBackToFriday);
 
-  // Format using ISO week of that Friday
-  return format(bagelWeekStart, "yyyy-'W'ww");
+  // Use calendar year of the Friday and week number
+  // Note: Using explicit year to avoid ISO week-year edge cases
+  const year = bagelWeekStart.getFullYear();
+  const weekNum = format(bagelWeekStart, 'ww');
+  return `${year}-W${weekNum}`;
 }
 
 /**
