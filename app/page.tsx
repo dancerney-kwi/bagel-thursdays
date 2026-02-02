@@ -206,70 +206,6 @@ export default function Home() {
               />
             </div>
 
-            {/* Error message */}
-            {submitError && (
-              <div className="mt-4 rounded-lg bg-red-50 p-3 text-center text-sm text-red-600">
-                {submitError}
-              </div>
-            )}
-
-            {/* Submit Button */}
-            <div className="mt-6">
-              <button
-                type="button"
-                onClick={handleSubmit}
-                disabled={!canSubmit}
-                className={`
-                  flex w-full items-center justify-center gap-2.5 rounded-full px-8 py-4 text-sm font-semibold uppercase tracking-wider transition-all
-                  ${canSubmit
-                    ? 'bg-primary text-white shadow-lg shadow-primary/25 hover:bg-primary/90 hover:shadow-xl hover:shadow-primary/30 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2'
-                    : 'cursor-not-allowed bg-gray-light/30 text-gray'
-                  }
-                `}
-              >
-                {isSubmitting ? (
-                  <>
-                    <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                    Submitting...
-                  </>
-                ) : hasSubmitted ? (
-                  'Order Submitted!'
-                ) : !isOrderingOpen ? (
-                  'Orders Closed'
-                ) : (
-                  <>
-                    Submit Order
-                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                    </svg>
-                  </>
-                )}
-              </button>
-            </div>
-
-            {/* Submission confirmation */}
-            {hasSubmitted && selectedBagel && (
-              <div className="mt-4 rounded-xl bg-primary/10 p-4 text-center">
-                <p className="font-medium text-primary">
-                  {userName}'s order: {getSubmittedBagelDisplay()}
-                </p>
-                <p className="mt-1 text-sm text-gray">
-                  Thank you! Your bagel preference has been recorded.
-                </p>
-              </div>
-            )}
-
-            {/* Orders closed message */}
-            {!isOrderingOpen && !hasSubmitted && (
-              <div className="mt-4 rounded-xl bg-gray-light/10 p-4 text-center">
-                <p className="font-medium text-foreground">
-                  Orders for this week are closed
-                </p>
-                <p className="mt-1 text-sm text-gray">
-                  New orders open Friday at midnight EST
-                </p>
-              </div>
-            )}
           </section>
 
           {/* Tally Board */}
@@ -283,10 +219,77 @@ export default function Home() {
 
         {/* Spread Requests */}
         <section className="rounded-2xl border border-gray-light/20 bg-white p-6 shadow-lg shadow-black/5 sm:p-8">
-          <h2 className="mb-4 text-xl font-black tracking-tight text-foreground sm:text-2xl">
+          <h2 className="mb-1 text-xl font-black tracking-tight text-foreground sm:text-2xl">
             Spread <span className="text-primary">Requests</span>
           </h2>
+          <p className="mb-4 text-sm text-gray">Optional — request your favorite spreads</p>
           {isClient && <SpreadRequests />}
+        </section>
+
+        {/* Submit Button Section */}
+        <section className="rounded-2xl border border-gray-light/20 bg-white p-6 shadow-lg shadow-black/5 sm:p-8">
+          {/* Error message */}
+          {submitError && (
+            <div className="mb-4 rounded-lg bg-red-50 p-3 text-center text-sm text-red-600">
+              {submitError}
+            </div>
+          )}
+
+          {/* Submit Button */}
+          <button
+            type="button"
+            onClick={handleSubmit}
+            disabled={!canSubmit}
+            className={`
+              flex w-full items-center justify-center gap-2.5 rounded-full px-8 py-4 text-sm font-semibold uppercase tracking-wider transition-all
+              ${canSubmit
+                ? 'bg-primary text-white shadow-lg shadow-primary/25 hover:bg-primary/90 hover:shadow-xl hover:shadow-primary/30 focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2'
+                : 'cursor-not-allowed bg-gray-light/30 text-gray'
+              }
+            `}
+          >
+            {isSubmitting ? (
+              <>
+                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                Submitting...
+              </>
+            ) : hasSubmitted ? (
+              'Order Submitted!'
+            ) : !isOrderingOpen ? (
+              'Orders Closed'
+            ) : (
+              <>
+                Submit Order
+                <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth={2.5}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                </svg>
+              </>
+            )}
+          </button>
+
+          {/* Submission confirmation */}
+          {hasSubmitted && selectedBagel && (
+            <div className="mt-4 rounded-xl bg-primary/10 p-4 text-center">
+              <p className="font-medium text-primary">
+                {userName}'s order: {getSubmittedBagelDisplay()}
+              </p>
+              <p className="mt-1 text-sm text-gray">
+                Thank you! Your bagel preference has been recorded.
+              </p>
+            </div>
+          )}
+
+          {/* Orders closed message */}
+          {!isOrderingOpen && !hasSubmitted && (
+            <div className="mt-4 rounded-xl bg-gray-light/10 p-4 text-center">
+              <p className="font-medium text-foreground">
+                Orders for this week are closed
+              </p>
+              <p className="mt-1 text-sm text-gray">
+                New orders open Friday at midnight EST
+              </p>
+            </div>
+          )}
         </section>
       </main>
 
